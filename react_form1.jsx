@@ -10,27 +10,18 @@ function App() {
   const [submittedName, setSubmittedName] = useState(null);
 
   function handleChange(event) {
-    const newValue = event.target.value;
-    const inputName = event.target.name;
+    const { name, value } = event.target;
 
-    setFullName((prevValue) => {
-      if (inputName === "fname") {
-        return {
-          fname: newValue,
-          lname: prevValue.lname,
-        };
-      } else if (inputName === "lname") {
-        return {
-          fname: prevValue.fname,
-          lname: newValue,
-        };
-      }
-    });
+    setFullName((prevValue) => ({
+      ...prevValue,
+      [name]: value,
+    }));
   }
 
   function handleSubmit(event) {
     event.preventDefault(); // Prevent page reload
     setSubmittedName(fullName);
+    setFullName({ fname: "", lname: "" }); // Clear input fields
   }
 
   return (
@@ -40,12 +31,13 @@ function App() {
         {submittedName
           ? `${submittedName.fname} ${submittedName.lname}`
           : "Guest"}{" "}
-      </h1>{" "}
+      </h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="fname"
           onChange={handleChange}
+          value={fullName.fname}
           placeholder="Enter your first name"
         />
         <br />
@@ -53,6 +45,7 @@ function App() {
           type="text"
           name="lname"
           onChange={handleChange}
+          value={fullName.lname}
           placeholder="Enter your last name"
         />
         <br />
